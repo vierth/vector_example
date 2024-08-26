@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css"> -->
+    <script src="p5.min.js"></script>
+
+<body style="background-color:rgb(20,20,20);"></body>
+<meta charset="utf-8" />
+<style>
+    .xaxis {background-color: "magenta";}
+    .yaxis {background-color: "cyan";color: "#191919"}
+    body {background-color:"#191919"}
+    
+</style>
+</head>
+<!-- justify-content: center;
+  align-items: center;
+  height: 100vh -->
+<body>
+    <main>
+        <div style="float: right; width: 35%; color:white; height: 10%; font-family:sans-serif; align-items: left;"> 
+        <br>
+        <table style="font-size: 1.1em;">
+            <tr><th>Book</th><th>Ch</th><th class="1 m">之</th><th class="2 m">的</th><th class="3 m">說</th><th class="4 m">曰</th><th class="5 m">了</th><th class="6 m">不</th><th class="7 m">他</th><th class="8 m">我</th></tr>
+            <tr><td>Three Kingdoms</td><td>1</td><td class="1 m">0.52</td><td class="2 m">0.01</td><td class="3 m">0.19</td><td class="4 m">0.6</td><td class="5 m">0.19</td><td class="6 m">0.54</td><td class="7 m">0.04</td><td class="8 m">0.09</td></tr>
+            <tr><td>Three Kingdoms</td><td>2</td><td class="1 m">0.6</td><td class="2 m">0.01</td><td class="3 m">0.08</td><td class="4 m">0.58</td><td class="5 m">0.06</td><td class="6 m">0.51</td><td class="7 m">0.05</td><td class="8 m">0.15</td></tr>
+            <tr><td>Water Margin</td><td>8</td><td class="1 m">0.02</td><td class="2 m">0.29</td><td class="3 m">0.26</td><td class="4 m">0.01</td><td class="5 m">0.66</td><td class="6 m">0.59</td><td class="7 m">0.16</td><td class="8 m">0.2</td></tr>
+            <tr><td>Water Margin</td><td>9</td><td class="1 m">0.04</td><td class="2 m">0.26</td><td class="3 m">0.18</td><td class="4 m">0.0</td><td class="5 m">0.72</td><td class="6 m">0.49</td><td class="7 m">0.32</td><td class="8 m">0.21</td></tr>
+            <tr><td>Journey to the West</td><td>76</td><td class="1 m">0.11</td><td class="2 m">0.32</td><td class="3 m">0.1</td><td class="4 m">0.0</td><td class="5 m">0.45</td><td class="6 m">0.42</td><td class="7 m">0.49</td><td class="8 m">0.51</td></tr>
+            <tr><td>Journey to the West</td><td>77</td><td class="1 m">0.11</td><td class="2 m">0.28</td><td class="3 m">0.12</td><td class="4 m">0.0</td><td class="5 m">0.57</td><td class="6 m">0.54</td><td class="7 m">0.32</td><td class="8 m">0.4</td></tr>
+            <tr><td>Plum in Golden Vase</td><td>24</td><td class="1 m">0.01</td><td class="2 m" >0.36</td><td class="3 m">0.23</td><td class="4 m">0.0</td><td class="5 m">0.6</td><td class="6 m">0.51</td><td class="7 m">0.32</td><td class="8 m">0.31</td></tr>
+            <tr><td>Plum in Golden Vase</td><td>25</td><td class="1 m">0.02</td><td class="2 m">0.44</td><td class="3 m">0.31</td><td class="4 m">0.0</td><td class="5 m">0.46</td><td class="6 m">0.4</td><td class="7 m">0.48</td><td class="8 m">0.35</td></tr>
+            <tr><td>...</td><td>...</td><td class="1 m">...</td><td class="2 m">...</td><td class="3 m">...</td><td class="4 m">...</td><td class="5 m">...</td><td class="6 m">...</td><td class="7 m">...</td><td class="8 m">...</td></tr>
+        </table>
+        <!-- </div> -->
+        <!-- <div  style="float: right; width:30%; color:white; justify-content:center; height:180vh; align-items:center; display:flex; font: 'Source Sans Pro';"> -->
+        <br>
+        <div id="pca" style="visibility: hidden;">
+        <h3>Principal Component Analysis</h3>
+        <table style="font-size: 1.1em;">
+        <tr><th>Book</th><th>Ch</th><th class="9">PC1</th><th class="10">PC2</th></tr>
+        <tr><td>Three Kingdoms</td><td>1</td><td class="9">0.63</td><td class="10">0.06</td></tr>
+        <tr><td>Three Kingdoms</td><td>2</td><td class="9">0.74</td><td class="10">-0.07</td></tr>
+        <tr><td>Water Margin</td><td>8</td><td class="9"> -0.31</td><td class="10">0.16</td></tr>
+        <tr><td>Water Margin</td><td>9</td><td class="9">-0.36</td><td class="10">0.11</td></tr>
+        <tr><td>Journey to the West</td><td>76</td><td class="9">-0.31</td><td class="10">-0.32</td></tr>
+        <tr><td>Journey to the West</td><td>77</td><td class="9">-0.29</td><td class="10">-0.11</td></tr>
+        <tr><td>Plum in Golden Vase</td><td>24</td><td class="9">-0.37</td><td class="10">-.03</td></tr>
+        <tr><td>Plum in Golden Vase</td><td>25</td><td class="9">-0.37</td><td class="10">-0.19</td></tr>
+        <tr><td>...</td><td>...</td><td class="9">...</td><td class="10">...</td></tr>
+        </table>
+        </div>
+
+        </div>
+    </main>
+    <script src="sketch.js"></script>
+    <script src="TextPoint.js"></script>
+    <script src="data_file.js"></script>
+    <script src="word_counts.js"></script>
+    <script>
+        
+        let matrix_state = 0
+
+        function set_matrix_state(matrix_state){
+            all = document.getElementsByClassName("m")
+            for (let i =0; i < all.length;i++){
+                all[i].style.backgroundColor="#191919"
+                all[i].style.color="white"
+            }
+
+            row1 = document.getElementsByClassName(options[matrix_state][0])
+            for (let i = 0; i < row1.length; i++){
+                row1[i].style.backgroundColor="magenta"
+            }
+            row2 = document.getElementsByClassName(options[matrix_state][1])
+            for (let i = 0; i < row2.length; i++){
+                row2[i].style.backgroundColor="cyan"
+                row2[i].style.color="#191919"
+
+            }
+
+            if (matrix_state == options.length - 1){
+            all = document.getElementsByClassName("m")
+            for (let i =0; i < all.length;i++){
+                all[i].style.backgroundColor="#FFFFFF"
+                all[i].style.color="#191919"
+            }
+            pcainfo = document.getElementById("pca")
+            pcainfo.style.visibility = 'visible'
+
+        }
+
+
+        }
+
+        let options = [["1", "2"], ["3", "4"], ["5", "6"], ["7", "8"], ["9","10"]]
+        
+        set_matrix_state(0)
+
+        // console.log(document.getElementsByClassName("1"))
+        document.addEventListener('keydown', function(event) {
+        if(event.keyCode == 37) {
+            matrix_state -= 1
+            if (matrix_state < 0) {
+                matrix_state = options.lenght - 1
+            }
+            set_matrix_state(matrix_state)
+
+        }
+        else if(event.keyCode == 39) {
+            matrix_state += 1
+            if (matrix_state >= options.length) {
+                matrix_state = 0
+            }
+            set_matrix_state(matrix_state)
+        }
+});
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Princeton</title>
+
+	<link rel="stylesheet" href="reveal/dist/reset.css">
+	<link rel="stylesheet" href="reveal/dist/reveal.css">
+	<link rel="stylesheet" href="reveal/dist/theme/black.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal/plugin/highlight/monokai.css">
+	<script src="reveal/js/jquery.js"></script>
+	<script src="force-graph-min.js"></script>
+	<script>
+		$(function () {
+			$("#slides").load("content.html");
+		});
+	</script>
+	<style>
+		i {font-style: "italic";}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section><h2>Token frequency</h2>
+			<h3 class="fragment">How often does a certain set of tokens appear within a document?</h3>
+			<aside class="notes">My general philosophy to computaitonal analysis is to use the simplest, most interpretable approach possible that effectively answers the question. So although modern transformer-based models might offer some marginal improvements to my use cases, to this point they don't out perform simpler models enough to justify their computational overhead/complexity. If the variation in frequency of a token is significant enough across multiple documents, then we should be able leverage this in a few ways. This known as a bag of words model</aside>
+			</section>
+			
+			<section>
+				<table style="font-size: .65em;">	
+					<tr><th>Book</th><th>Chapter</th><th>之</th><th>的</th><th>說</th><th>曰</th><th>了</th><th>不</th><th>他</th><th>我</th></tr>
+					<tr><td>Three Kingdoms</td><td>1</td><td>61</td><td>1</td><td>22</td><td>71</td><td>23</td><td>64</td><td>5</td><td>11</td></tr>
+					<tr><td>Three Kingdoms</td><td>2</td><td>64</td><td>1</td><td>8</td><td>62</td><td>6</td><td>54</td><td>5</td><td>16</td></tr>
+					<tr><td>Water Margin</td><td>8</td><td>3</td><td>39</td><td>34</td><td>1</td><td>88</td><td>78</td><td>21</td><td>27</td></tr>
+					<tr><td>Water Margin</td><td>9</td><td>8</td><td>48</td><td>33</td><td>0</td><td>132</td><td>90</td><td>58</td><td>39</td></tr>
+					<tr><td>Journey to the West</td><td>76</td><td>26</td><td>74</td><td>23</td><td>0</td><td>106</td><td>98</td><td>114</td><td>120</td></tr>
+					<tr><td>Journey to the West</td><td>77</td><td>23</td><td>56</td><td>25</td><td>1</td><td>115</td><td>109</td><td>64</td><td>81</td></tr>
+					<tr><td>Plum in Golden Vase</td><td>24</td><td>2</td><td>66</td><td>43</td><td>0</td><td>111</td><td>95</td><td>60</td><td>57</td></tr>
+					<tr><td>Plum in Golden Vase</td><td>25</td><td>7</td><td>126</td><td>89</td><td>0</td><td>132</td><td>116</td><td>138</td><td>100</td></tr>
+					<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+				</table>
+				<aside class="notes">We can immediately see an issue here. These numbers are highly dependent on the length of a particular input text</aside>
+			</section>
+
+			<section>
+				<table style="font-size: .65em;">
+					<tr><th>Book</th><th>Chapter</th><th>之</th><th>的</th><th>說</th><th>曰</th><th>了</th><th>不</th><th>他</th><th>我</th></tr>
+					<tr><td>Three Kingdoms</td><td>1</td><td>0.52</td><td>0.01</td><td>0.19</td><td>0.6</td><td>0.19</td><td>0.54</td><td>0.04</td><td>0.09</td></tr>
+					<tr><td>Three Kingdoms</td><td>2</td><td>0.6</td><td>0.01</td><td>0.08</td><td>0.58</td><td>0.06</td><td>0.51</td><td>0.05</td><td>0.15</td></tr>
+					<tr><td>Water Margin</td><td>8</td><td>0.02</td><td>0.29</td><td>0.26</td><td>0.01</td><td>0.66</td><td>0.59</td><td>0.16</td><td>0.2</td></tr>
+					<tr><td>Water Margin</td><td>9</td><td>0.04</td><td>0.26</td><td>0.18</td><td>0.0</td><td>0.72</td><td>0.49</td><td>0.32</td><td>0.21</td></tr>
+					<tr><td>Journey to the West</td><td>76</td><td>0.11</td><td>0.32</td><td>0.1</td><td>0.0</td><td>0.45</td><td>0.42</td><td>0.49</td><td>0.51</td></tr>
+					<tr><td>Journey to the West</td><td>77</td><td>0.11</td><td>0.28</td><td>0.12</td><td>0.0</td><td>0.57</td><td>0.54</td><td>0.32</td><td>0.4</td></tr>
+					<tr><td>Plum in Golden Vase</td><td>24</td><td>0.01</td><td>0.36</td><td>0.23</td><td>0.0</td><td>0.6</td><td>0.51</td><td>0.32</td><td>0.31</td></tr>
+					<tr><td>Plum in Golden Vase</td><td>25</td><td>0.02</td><td>0.44</td><td>0.31</td><td>0.0</td><td>0.46</td><td>0.4</td><td>0.48</td><td>0.35</td></tr>
+					<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+				</table>
+				<aside class="notes">We can immediately see an issue here. These numbers are highly dependent on the length of a particular input text</aside>
+			</section>
+
+			<section>
+				<table style="font-size: .65em;">
+					<tr><th>Book</th><th>Chapter</th><th>之</th><th>的</th><th>說</th><th>曰</th><th>了</th><th>不</th><th>他</th><th>我</th></tr>
+					<tr><td>Three Kingdoms</td><td>1</td><td style="background: magenta">0.52</td><td style="background: cyan; color: #191919">0.01</td><td>0.19</td><td>0.6</td><td>0.19</td><td>0.54</td><td>0.04</td><td>0.09</td></tr>
+					<tr><td>Three Kingdoms</td><td>2</td><td style="background: magenta">0.6</td><td style="background: cyan; color: #191919">0.01</td><td>0.08</td><td>0.58</td><td>0.06</td><td>0.51</td><td>0.05</td><td>0.15</td></tr>
+					<tr><td>Water Margin</td><td>8</td><td style="background: magenta">0.02</td><td style="background: cyan; color: #191919">0.29</td><td>0.26</td><td>0.01</td><td>0.66</td><td>0.59</td><td>0.16</td><td>0.2</td></tr>
+					<tr><td>Water Margin</td><td>9</td><td style="background: magenta">0.04</td><td style="background: cyan; color: #191919">0.26</td><td>0.18</td><td>0.0</td><td>0.72</td><td>0.49</td><td>0.32</td><td>0.21</td></tr>
+					<tr><td>Journey to the West</td><td>76</td><td style="background: magenta">0.11</td><td style="background: cyan; color: #191919">0.32</td><td>0.1</td><td>0.0</td><td>0.45</td><td>0.42</td><td>0.49</td><td>0.51</td></tr>
+					<tr><td>Journey to the West</td><td>77</td><td style="background: magenta">0.11</td><td style="background: cyan; color: #191919">0.28</td><td>0.12</td><td>0.0</td><td>0.57</td><td>0.54</td><td>0.32</td><td>0.4</td></tr>
+					<tr><td>Plum in Golden Vase</td><td>24</td><td style="background: magenta">0.01</td><td style="background: cyan; color: #191919">0.36</td><td>0.23</td><td>0.0</td><td>0.6</td><td>0.51</td><td>0.32</td><td>0.31</td></tr>
+					<tr><td>Plum in Golden Vase</td><td>25</td><td style="background: magenta">0.02</td><td style="background: cyan; color: #191919">0.44</td><td>0.31</td><td>0.0</td><td>0.46</td><td>0.4</td><td>0.48</td><td>0.35</td></tr>
+					<tr><td>...</td><td>...</td><td style="background: magenta">...</td><td style="background: cyan; color: #191919">...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+				</table>
+				<aside class="notes"></aside>
+			</section>
+
+			<section data-background-iframe="charplotviz/index.html" data-background-interactive>
+				<aside class="notes">"c" to show components, note that this process causes lots of information loss</aside>
+			</section>
+			<section><h2>Every choice influences the patterns that emerge</h2>
+			<aside class="notes">So what set of criteria reveal patterns apposite to our inquiries?</aside>
+			</section>
+			<section><table>
+				<tr><th>Vector Type</th><th>Common Clustering</th></tr>
+				<tr><td>Most Frequent 100 1-grams</td><td>Authorship</td></tr>
+				<tr><td>Most Frequent 200 1-grams</td><td>Text of origin</td></tr>
+				<tr><td>Most Frequent 1K 1-grams</td><td>Genre</td></tr>
+				<tr><td>Most Frequent 1K 3-grams</td><td>Semantic Content</td></tr>
+				<tr><td>Custom Vocabulary</td><td>???</td></tr>
+			</table>
+			<aside class="notes">These are not at all hard and fast rules and must be imperically determined</aside>
+		</section>
+			
+		</div>
+	</div>
+
+	<script src="reveal/dist/reveal.js"></script>
+	<script src="reveal/plugin/notes/notes.js"></script>
+	<script src="reveal/plugin/markdown/markdown.js"></script>
+	<script src="reveal/plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+			transition: 'fade',
+			transitionSpeed: 'fast',
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>
